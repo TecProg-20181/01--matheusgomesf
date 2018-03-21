@@ -22,7 +22,11 @@
           return a;
       return b;
   }
-
+  int min(int a, int b) {
+      if (a < b)
+          return a;
+      return b;
+  }
   int pixel_igual(Pixel p1, Pixel p2) {
       if (p1.red == p2.red &&
           p1.green == p2.green &&
@@ -90,8 +94,7 @@
       return rotacionada;
   }
 
-  void inverter_cores(unsigned short int pixel[512][512][3],
-                      unsigned int width, unsigned int height) {
+  void inverter_cores(unsigned short int pixel[512][512][3], unsigned int width, unsigned int height) {
       for (unsigned int i = 0; i < height; ++i) {
           for (unsigned int j = 0; j < width; ++j) {
               pixel[i][j][0] = 255 - pixel[i][j][0];
@@ -114,7 +117,6 @@
               cortada.pixel[i][j][2] = img.pixel[i + y][j + x][2];
           }
       }
-
       return cortada;
   }
   Image sepia(Image img){
@@ -183,25 +185,31 @@
     }
     return img;
   }
+
+  Image ler_imagem(Image img){
+    // read type of image
+    char p3[4];
+    scanf("%s", p3);
+
+    // read width height and color of image
+    int max_color;
+    scanf("%u %u %d", &img.width, &img.height, &max_color);
+
+    // read all pixels of image
+    for (unsigned int i = 0; i < img.height; ++i) {
+        for (unsigned int j = 0; j < img.width; ++j) {
+            scanf("%hu %hu %hu", &img.pixel[i][j][0],
+                                 &img.pixel[i][j][1],
+                                 &img.pixel[i][j][2]);
+        }
+    }
+    return img;
+  }
+
   int main() {
       Image img;
 
-      // read type of image
-      char p3[4];
-      scanf("%s", p3);
-
-      // read width height and color of image
-      int max_color;
-      scanf("%u %u %d", &img.width, &img.height, &max_color);
-
-      // read all pixels of image
-      for (unsigned int i = 0; i < img.height; ++i) {
-          for (unsigned int j = 0; j < img.width; ++j) {
-              scanf("%hu %hu %hu", &img.pixel[i][j][0],
-                                   &img.pixel[i][j][1],
-                                   &img.pixel[i][j][2]);
-          }
-      }
+      img = ler_imagem(img);
 
       int n_opcoes;
       scanf("%d", &n_opcoes);
