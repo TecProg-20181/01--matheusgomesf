@@ -224,8 +224,7 @@
                   break;
               }
               case 2: { // Filtro Sepia
-
-                img = sepia(img);
+                  img = sepia(img);
                   break;
               }
               case 3: { // Blur
@@ -267,6 +266,13 @@
                   scanf("%d %d", &width, &height);
 
                   img = cortar_imagem(img, x, y, width, height);
+                  break;
+              }
+              case 8: { // sepia_blur
+                  int tamanho = 0;
+                  scanf("%d", &tamanho);
+                  img = sepia(img);
+                  blur(img.height, img.pixel, tamanho, img.width);
                   break;
               }
           }
