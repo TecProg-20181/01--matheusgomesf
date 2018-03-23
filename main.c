@@ -35,7 +35,6 @@
       return 0;
   }
 
-
   Image escala_de_cinza(Image img) {
       for (unsigned int i = 0; i < img.height; ++i) {
           for (unsigned int j = 0; j < img.width; ++j) {
@@ -51,18 +50,18 @@
       return img;
   }
 
-  void blur(unsigned int height, unsigned short int pixel[512][512][3], int T, unsigned int width) {
-      for (unsigned int i = 0; i < height; ++i) {
-          for (unsigned int j = 0; j < width; ++j) {
+  Image blur(Image img, int T) {
+      for (unsigned int i = 0; i < img.height; ++i) {
+          for (unsigned int j = 0; j < img.width; ++j) {
               Pixel media = {0, 0, 0};
 
-              int menor_height = (height - 1 > i + T/2) ? i + T/2 : height - 1;
-              int min_width = (width - 1 > j + T/2) ? j + T/2 : width - 1;
+              int menor_height = (img.height - 1 > i + T/2) ? i + T/2 :img.height - 1;
+              int min_width = (img.width - 1 > j + T/2) ? j + T/2 : img.width - 1;
               for(int x = (0 > i - T/2 ? 0 : i - T/2); x <= menor_height; ++x) {
                   for(int y = (0 > j - T/2 ? 0 : j - T/2); y <= min_width; ++y) {
-                      media.red += pixel[x][y][0];
-                      media.green += pixel[x][y][1];
-                      media.blue += pixel[x][y][2];
+                      media.red += img.pixel[x][y][0];
+                      media.green += img.pixel[x][y][1];
+                      media.blue += img.pixel[x][y][2];
                   }
               }
 
@@ -70,11 +69,12 @@
               media.green /= T * T;
               media.blue /= T * T;
 
-              pixel[i][j][0] = media.red;
-              pixel[i][j][1] = media.green;
-              pixel[i][j][2] = media.blue;
+              img.pixel[i][j][0] = media.red;
+              img.pixel[i][j][1] = media.green;
+              img.pixel[i][j][2] = media.blue;
           }
       }
+      return img;
   }
 
   Image rotacionar90direita(Image img) {
@@ -230,7 +230,7 @@
               case 3: { // Blur
                   int tamanho = 0;
                   scanf("%d", &tamanho);
-                  blur(img.height, img.pixel, tamanho, img.width);
+                  img = blur(img, tamanho);
                   break;
               }
               case 4: { // Rotacao
@@ -266,13 +266,6 @@
                   scanf("%d %d", &width, &height);
 
                   img = cortar_imagem(img, x, y, width, height);
-                  break;
-              }
-              case 8: { // sepia_blur
-                  int tamanho = 0;
-                  scanf("%d", &tamanho);
-                  img = sepia(img);
-                  blur(img.height, img.pixel, tamanho, img.width);
                   break;
               }
           }
