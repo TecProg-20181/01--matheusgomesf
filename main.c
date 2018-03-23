@@ -16,23 +16,10 @@
       unsigned int height;
   } Image;
 
-
-  int max(int a, int b) {
-      if (a > b)
-          return a;
-      return b;
-  }
   int min(int a, int b) {
       if (a < b)
           return a;
       return b;
-  }
-  int pixel_igual(Pixel p1, Pixel p2) {
-      if (p1.red == p2.red &&
-          p1.green == p2.green &&
-          p1.blue == p2.blue)
-          return 1;
-      return 0;
   }
 
   Image escala_de_cinza(Image img) {
@@ -171,10 +158,9 @@
   Image printar_imagem(Image img) {
     // print type of image
     printf("P3\n");
-    // print width height and color of image
+
     printf("%u %u\n255\n", img.width, img.height);
 
-    // print pixels of image
     for (unsigned int i = 0; i < img.height; ++i) {
         for (unsigned int j = 0; j < img.width; ++j) {
             printf("%hu %hu %hu ", img.pixel[i][j][0],
@@ -192,11 +178,9 @@
     char p3[4];
     scanf("%s", p3);
 
-    // read width height and color of image
     int max_color;
     scanf("%u %u %d", &img.width, &img.height, &max_color);
 
-    // read all pixels of image
     for (unsigned int i = 0; i < img.height; ++i) {
         for (unsigned int j = 0; j < img.width; ++j) {
             scanf("%hu %hu %hu", &img.pixel[i][j][0],
