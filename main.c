@@ -94,14 +94,15 @@
       return rotacionada;
   }
 
-  void inverter_cores(unsigned short int pixel[512][512][3], unsigned int width, unsigned int height) {
-      for (unsigned int i = 0; i < height; ++i) {
-          for (unsigned int j = 0; j < width; ++j) {
-              pixel[i][j][0] = 255 - pixel[i][j][0];
-              pixel[i][j][1] = 255 - pixel[i][j][1];
-              pixel[i][j][2] = 255 - pixel[i][j][2];
+  Image inverter_cores(Image img) {
+      for (unsigned int i = 0; i < img.height; ++i) {
+          for (unsigned int j = 0; j < img.width; ++j) {
+              img.pixel[i][j][0] = 255 - img.pixel[i][j][0];
+              img.pixel[i][j][1] = 255 - img.pixel[i][j][1];
+              img.pixel[i][j][2] = 255 - img.pixel[i][j][2];
           }
       }
+      return img;
   }
 
   Image cortar_imagem(Image img, int x, int y, int width, int height) {
@@ -128,15 +129,15 @@
             pixel[2] = img.pixel[x][j][2];
 
             int p =  pixel[0] * .393 + pixel[1] * .769 + pixel[2] * .189;
-            int menor_red = (255 >  p) ? p : 255;
+            int menor_red = min(p, 255);
             img.pixel[x][j][0] = menor_red;
 
             p =  pixel[0] * .349 + pixel[1] * .686 + pixel[2] * .168;
-            menor_red = (255 >  p) ? p : 255;
+            menor_red = min(p, 255);
             img.pixel[x][j][1] = menor_red;
 
             p =  pixel[0] * .272 + pixel[1] * .534 + pixel[2] * .131;
-            menor_red = (255 >  p) ? p : 255;
+            menor_red = min(p, 255);
             img.pixel[x][j][2] = menor_red;
         }
     }
@@ -256,7 +257,7 @@
                   break;
               }
               case 6: { // Inversao de Cores
-                  inverter_cores(img.pixel, img.width, img.height);
+                  img = inverter_cores(img);
                   break;
               }
               case 7: { // Cortar Imagem
