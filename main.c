@@ -7,10 +7,7 @@ typedef struct _pixel {
 } Pixel;
 
 typedef struct _image {
-    // [width][height][rgb]
-    // 0 -> red
-    // 1 -> green
-    // 2 -> blue
+    // [width][height]
     Pixel pixel[512][512];
     unsigned int width;
     unsigned int height;
@@ -102,8 +99,13 @@ Image inverter_cores(Image img) {
     return img;
 }
 
-Image cortar_imagem(Image img, int x, int y, int width, int height) {
+Image cortar_imagem(Image img) {
     Image cortada;
+
+    int x, y;
+    scanf("%d %d", &x, &y);
+    int width, height;
+    scanf("%d %d", &width, &height);
 
     cortada.width = width;
     cortada.height = height;
@@ -141,28 +143,37 @@ for (unsigned int x = 0; x < img.height; ++x) {
 return img;
 }
 
-Image espelhamento(Image img,int height,int width, int horizontal){
-for (int i2 = 0; i2 < height; ++i2) {
-    for (int j = 0; j < width; ++j) {
-        int x = i2, y = j;
+Image espelhamento(Image img){
+    int horizontal = 0;
+    scanf("%d", &horizontal);
 
-        if (horizontal == 1) y = img.width - 1 - j;
-        else x = img.height - 1 - i2;
+    int width = img.width, height = img.height;
 
-        Pixel aux1;
-        aux1.red = img.pixel[i2][j].red;
-        aux1.green = img.pixel[i2][j].green;
-        aux1.blue = img.pixel[i2][j].blue;
+    if (horizontal == 1) width /= 2;
+    else height /= 2;
+    
+    for (int i2 = 0; i2 < height; ++i2) {
+        for (int j = 0; j < width; ++j) {
+            int x = i2, y = j;
 
-        img.pixel[i2][j].red = img.pixel[x][y].red;
-        img.pixel[i2][j].green = img.pixel[x][y].green;
-        img.pixel[i2][j].blue = img.pixel[x][y].blue;
+            if (horizontal == 1) y = img.width - 1 - j;
+            else x = img.height - 1 - i2;
 
-        img.pixel[x][y].red = aux1.red;
-        img.pixel[x][y].green = aux1.green;
-        img.pixel[x][y].blue = aux1.blue;
+            Pixel aux1;
+
+            aux1.red = img.pixel[i2][j].red;
+            aux1.green = img.pixel[i2][j].green;
+            aux1.blue = img.pixel[i2][j].blue;
+
+            img.pixel[i2][j].red = img.pixel[x][y].red;
+            img.pixel[i2][j].green = img.pixel[x][y].green;
+            img.pixel[i2][j].blue = img.pixel[x][y].blue;
+
+            img.pixel[x][y].red = aux1.red;
+            img.pixel[x][y].green = aux1.green;
+            img.pixel[x][y].blue = aux1.blue;
+        }
     }
-}
 return img;
 }
 Image printar_imagem(Image img) {
@@ -244,15 +255,8 @@ int main() {
                 break;
             }
             case 5: { // Espelhamento
-                int horizontal = 0;
-                scanf("%d", &horizontal);
 
-                int width = img.width, height = img.height;
-
-                if (horizontal == 1) width /= 2;
-                else height /= 2;
-
-                img = espelhamento(img, height, width, horizontal);
+                img = espelhamento(img);
 
                 break;
             }
@@ -261,12 +265,8 @@ int main() {
                 break;
             }
             case 7: { // Cortar Imagem
-                int x, y;
-                scanf("%d %d", &x, &y);
-                int width, height;
-                scanf("%d %d", &width, &height);
 
-                img = cortar_imagem(img, x, y, width, height);
+                img = cortar_imagem(img);
                 break;
             }
         }
